@@ -35,7 +35,7 @@ end
 app_db = AppDB.new(database_uri)
 
 namespace :db do
-  desc 'create database'
+  desc 'Create database'
   task :create do
     Sequel.connect(app_db.to_h.merge(database: :postgres)) do |db|
       db.execute "DROP DATABASE IF EXISTS #{app_db.database}"
@@ -43,7 +43,7 @@ namespace :db do
     end
   end
 
-  desc 'drop database'
+  desc 'Drop database'
   task :drop do
     Sequel.connect(app_db.to_h.merge(database: :postgres)) do |db|
       db.execute "DROP DATABASE IF EXISTS #{app_db.database}"
