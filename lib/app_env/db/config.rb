@@ -5,13 +5,13 @@ module AppEnv
     class Config
       attr_accessor :adapter, :host, :port, :user, :password, :database
 
-      def initialize(url=ENV['DATABASE_URL'])
+      def initialize(url=ENV['DATABASE_URL'], user=ENV['DATABASE_USER'], password=ENV['DATABASE_PASSWORD'])
         uri = URI.parse(url)
         @adapter = uri.scheme
         @host = uri.host
         @port = uri.port
-        @user = uri.user
-        @password = uri.password
+        @user = ENV['DATABASE_USER'] || uri.user
+        @password = ENV['DATABASE_PASSWORD'] || uri.password
         @database = uri.path.delete_prefix('/')
         @opts = URI::decode_www_form(uri.query).to_h if uri.query
       end
