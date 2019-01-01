@@ -1,11 +1,10 @@
-# Assumes have database set in ENV
+# Assumes have database set in ENV['DATA_URL']
 
 require "rom/sql/rake_task"
 require 'sequel'
 
 require_relative 'app_env_db_config'
-database_url = ENV['DATABASE_URL']
-app_db_config = AppEnv::DB::Config.new(database_url)
+app_db_config = AppEnv::DB::Config.new
 
 namespace :db do
   desc 'Create database'

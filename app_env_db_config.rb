@@ -5,7 +5,7 @@ module AppEnv
     class Config
       attr_accessor :adapter, :host, :port, :user, :password, :database
 
-      def initialize(url)
+      def initialize(url=ENV['DATABASE_URL'])
         uri = URI.parse(url)
         @adapter = uri.scheme
         @host = uri.host
