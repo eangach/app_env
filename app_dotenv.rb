@@ -7,7 +7,7 @@ module AppEnv
   module_function
 
   def root
-    Pathname.new(Dir.pwd)
+    ENV['APP_ROOT'] ? Pathname(ENV['APP_ROOT']) : Pathname.new(Dir.pwd)
   end
 
   def env
