@@ -1,15 +1,20 @@
 # Load dotenv files depending on enviornment set in ENV['APP_ENV'].
 
-class AppEnv
-  def self.root
+module AppEnv
+  class << self
+  end
+
+  module_function
+
+  def root
     Pathname.new(Dir.pwd)
   end
 
-  def self.env
+  def env
     ENV['APP_ENV'] || ENV['RACK_ENV'] || 'development'
   end
 
-  def self.dotenv_files
+  def dotenv_files
     [
       root.join(".env.#{env}.local"),
       (root.join(".env.local") unless env == 'test'),
@@ -18,20 +23,20 @@ class AppEnv
     ].compact
   end
 
-  def self.load_dotenv
+  def load_dotenv
     require 'dotenv'
     Dotenv.load(*dotenv_files)
   end
 
-  def self.production?
+  def production?
     env == 'production'
   end
 
-  def self.test?
+  def test?
     env == 'test'
   end
 
-  def self.development?
+  def development?
     env == 'development'
   end
 end
