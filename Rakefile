@@ -1,52 +1,26 @@
 require "rom/sql/rake_task"
 require 'sequel'
-require 'uri'
 
 require_relative 'app_dotenv'
 AppEnv.load_dotenv
 
+require_relative 'app_env_db_config'
 database_url = ENV['DATABASE_URL']
-
-class AppDB
-  attr_accessor :adapter, :host, :port, :user, :password, :database
-  def initialize(url)
-    uri = URI.parse(url)
-    @adapter = uri.scheme
-    @host = uri.host
-    @port = uri.port
-    @user = uri.user
-    @password = uri.password
-    @database = uri.path.delete_prefix('/')
-    @opts = URI::decode_www_form(uri.query).to_h if uri.query
-  end
-
-  def to_h
-    {
-      adapter: adapter,
-      host: host,
-      port: port,
-      user: user,
-      password: password,
-      database: database,
-    }.compact
-  end
-end
-
-app_db = AppDB.new(database_url)
+app_db_config = AppEnv::DB::Config.new(database_url)
 
 namespace :db do
   desc 'Create database'
   task :create do
-    Sequel.connect(app_db.to_h.merge(database: :postgres)) do |db|
-      db.execute "DROP DATABASE IF EXISTS #{app_db.database}"
-      db.execute "CREATE DATABASE #{app_db.database}"
+    Sequel.connect(app_db_config.to_h.merge(database: :postgres)) do |db|
+      db.execute "DROP DATABASE IF EXISTS #{app_db_config.database}"
+      db.execute "CREATE DATABASE #{app_db_config.database}"
     end
   end
 
   desc 'Drop database'
   task :drop do
-    Sequel.connect(app_db.to_h.merge(database: :postgres)) do |db|
-      db.execute "DROP DATABASE IF EXISTS #{app_db.database}"
+    Sequel.connect(app_db_config.to_h.merge(database: :postgres)) do |db|
+      db.execute "DROP DATABASE IF EXISTS #{app_db_config.database}"
     end
   end
 end
