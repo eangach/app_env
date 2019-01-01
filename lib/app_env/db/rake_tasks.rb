@@ -3,7 +3,7 @@
 require "rom/sql/rake_task"
 require 'sequel'
 
-require_relative 'app_env_db_config'
+require_relative 'config'
 app_db_config = AppEnv::DB::Config.new
 
 namespace :db do
