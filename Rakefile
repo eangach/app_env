@@ -5,7 +5,7 @@ require 'uri'
 require_relative 'app_dotenv'
 AppEnv.load_dotenv
 
-database_uri = ENV['DATABASE_URI']
+database_url = ENV['DATABASE_URL']
 
 class AppDB
   attr_accessor :adapter, :host, :port, :user, :password, :database
@@ -32,7 +32,7 @@ class AppDB
   end
 end
 
-app_db = AppDB.new(database_uri)
+app_db = AppDB.new(database_url)
 
 namespace :db do
   desc 'Create database'
